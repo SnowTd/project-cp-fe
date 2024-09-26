@@ -55,7 +55,7 @@ export default function ResForm({
     const urlapi = process.env.BASEURL_API!
     const url = `${urlapi}register`
     const res = await axios.post(
-      'https://5f0a-202-28-119-90.ngrok-free.app/register',
+      'https://api.sniw.me/register',
       {
         userID: profile.userId,
         name,

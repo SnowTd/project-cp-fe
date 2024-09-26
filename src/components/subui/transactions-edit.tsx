@@ -46,7 +46,7 @@ export default function TransactionsEdit({ row, type }: any) {
       const user = row.getValue('uid')
       if (user) {
         const res = await axios
-          .get(`https://5f0a-202-28-119-90.ngrok-free.app/sub/${user}`)
+          .get(`https://api.sniw.me/sub/${user}`)
           .then((res) => res.data)
       }
     }
@@ -56,7 +56,7 @@ export default function TransactionsEdit({ row, type }: any) {
       if (item.id === undefined) {
         const num = Number(item.amount)
         const res = await axios.post(
-          `https://5f0a-202-28-119-90.ngrok-free.app/${orderID}`,
+          `https://api.sniw.me/${orderID}`,
           {
             type: item.type,
             amount: num,
@@ -78,7 +78,7 @@ export default function TransactionsEdit({ row, type }: any) {
   const deleteTask = async (index: number, id: any) => {
     if (id !== undefined) {
       const res = await axios
-        .delete(`https://5f0a-202-28-119-90.ngrok-free.app/type/${orderID}`, {
+        .delete(`https://api.sniw.me/type/${orderID}`, {
           data: {
             typeid: id,
           },

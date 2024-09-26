@@ -20,7 +20,7 @@ export default function Register() {
     async function Check() {
       const res = await axios
         .get(
-          `https://ldbpxndv-3001.asse.devtunnels.ms/register/${profile?.userId}`
+          `https://api.sniw.me/register/${profile?.userId}`
         )
         .then((res) => res.data)
       console.log(res)

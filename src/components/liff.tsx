@@ -36,7 +36,7 @@ const LiffPage = ({}) => {
     const url = `${urlapi}user`
     try {
       const response = await axios.post(
-        'https://5f0a-202-28-119-90.ngrok-free.app/user',
+        'https://api.sniw.me/user',
         {
           userId: profileData.userId,
           displayName: profileData.displayName,

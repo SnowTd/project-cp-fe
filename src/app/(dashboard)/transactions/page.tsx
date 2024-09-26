@@ -3,7 +3,7 @@ import axios from 'axios'
 
 async function getData() {
   const res = await axios
-    .get('https://5f0a-202-28-119-90.ngrok-free.app/order')
+    .get('https://api.sniw.me/order')
     .then((res) => res.data)
   return res.response
 }
