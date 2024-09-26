@@ -13,19 +13,20 @@ import { z } from 'zod'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 const formSchema = z.object({
-  amount: z.number().min(1).max(100),
+  amount: z.string(),
 })
 export default function FormSub({ setAmount }: any) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
+      amount: '',
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setAmount(values)
-    console.log()
+    const num = Number(values.amount)
+    setAmount(num)
+    console.log(num)
   }
   return (
     <Form {...form}>
@@ -51,8 +52,9 @@ export default function FormSub({ setAmount }: any) {
         />
         <Button
           type='submit'
-          className='mt-4'>
-          Submit
+          variant={'outline'}
+          className='flex justify-center mt-1 w-full'>
+          edit
         </Button>
       </form>
     </Form>

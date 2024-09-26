@@ -54,12 +54,15 @@ export default function ResForm({
     const { address, phone, name } = values
     const urlapi = process.env.BASEURL_API!
     const url = `${urlapi}register`
-    const res = await axios.post('http://localhost:3001/register', {
-      userID: profile.userId,
-      name,
-      phone,
-      address,
-    })
+    const res = await axios.post(
+      'https://5f0a-202-28-119-90.ngrok-free.app/register',
+      {
+        userID: profile.userId,
+        name,
+        phone,
+        address,
+      }
+    )
   }
 
   // 2. Define a submit handler.

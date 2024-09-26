@@ -22,7 +22,7 @@ export default function TransactionsEdit({ row, type }: any) {
   const [input, setInput] = useState('')
   const [isAdding, setIsAdding] = useState(false)
   const [orderID, setOrderID] = useState<any>()
-  const [amount, setAmount] = useState()
+  const [amount, setAmount] = useState(0)
 
   // console.log(item)
   useEffect(() => {
@@ -41,14 +41,27 @@ export default function TransactionsEdit({ row, type }: any) {
     console.log('use')
   }, [item.length])
 
+  async function Check() {
+    if (row.getValue('subscription')) {
+      const user = row.getValue('uid')
+      if (user) {
+        const res = await axios
+          .get(`https://5f0a-202-28-119-90.ngrok-free.app/sub/${user}`)
+          .then((res) => res.data)
+      }
+    }
+  }
   async function Post(data: any) {
     data.map(async (item: any) => {
       if (item.id === undefined) {
         const num = Number(item.amount)
-        const res = await axios.post(`http://localhost:3001/type/${orderID}`, {
-          type: item.type,
-          amount: num,
-        })
+        const res = await axios.post(
+          `https://5f0a-202-28-119-90.ngrok-free.app/${orderID}`,
+          {
+            type: item.type,
+            amount: num,
+          }
+        )
       }
     })
   }
@@ -65,7 +78,7 @@ export default function TransactionsEdit({ row, type }: any) {
   const deleteTask = async (index: number, id: any) => {
     if (id !== undefined) {
       const res = await axios
-        .delete(`http://localhost:3001/type/${orderID}`, {
+        .delete(`https://5f0a-202-28-119-90.ngrok-free.app/type/${orderID}`, {
           data: {
             typeid: id,
           },
@@ -94,7 +107,10 @@ export default function TransactionsEdit({ row, type }: any) {
                   {row.getValue('subscription') ? 'สมาชิกรายเดือน' : 'สมาชิก'}
                 </p>
                 {row.getValue('subscription') ? (
-                  <p>ยอดรายเดือนคงเหลือ: </p>
+                  <>
+                    <p>ยอดรายเดือนคงเหลือ: </p>
+                    <span> จำนวนใน order : {amount!}</span>
+                  </>
                 ) : (
                   ''
                 )}
@@ -104,13 +120,9 @@ export default function TransactionsEdit({ row, type }: any) {
                       <li
                         key={e.id}
                         className='flex justify-between p-2'>
-                        {row.getValue('subscription') ? (
-                          <span> {amount}</span>
-                        ) : (
-                          <span>
-                            {e.type} (Amount: {e.amount})
-                          </span>
-                        )}
+                        <span>
+                          {e.type} (Amount: {e.amount})
+                        </span>
                         <Button
                           variant='outline'
                           size='icon'

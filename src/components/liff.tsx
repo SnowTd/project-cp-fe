@@ -14,7 +14,7 @@ const LiffPage = ({}) => {
   useEffect(() => {
     const initializeLiff = async () => {
       try {
-        await liff.init({ liffId: '2006367792-jkgoyNWW' })
+        await liff.init({ liffId: '2006378911-pdP8yGWK' })
         if (liff.isLoggedIn()) {
           const profileData = await liff.getProfile()
           setProfile(profileData)
@@ -35,11 +35,14 @@ const LiffPage = ({}) => {
     const urlapi = process.env.BASEURL_API!
     const url = `${urlapi}user`
     try {
-      const response = await axios.post('http://localhost:3001/user', {
-        userId: profileData.userId,
-        displayName: profileData.displayName,
-        pictureUrl: profileData.pictureUrl,
-      })
+      const response = await axios.post(
+        'https://5f0a-202-28-119-90.ngrok-free.app/user',
+        {
+          userId: profileData.userId,
+          displayName: profileData.displayName,
+          pictureUrl: profileData.pictureUrl,
+        }
+      )
       console.log(response.data)
       console.log('Profile sent to backend:', response.data)
     } catch (error) {

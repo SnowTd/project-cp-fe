@@ -78,7 +78,7 @@ export function ComboboxForm({ item, setItem, setInput, setIsAdding }: any) {
     const { type, amount } = data
     const num = Number(amount)
     const res = await axios
-      .post('http://localhost:3001/order', {
+      .post('https://5f0a-202-28-119-90.ngrok-free.app/order', {
         type,
         num,
       })

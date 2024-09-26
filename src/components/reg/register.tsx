@@ -19,11 +19,14 @@ export default function Register() {
   useEffect(() => {
     async function Check() {
       const res = await axios
-        .get(`http://localhost:3001/register/${profile?.userId}`)
+        .get(
+          `https://ldbpxndv-3001.asse.devtunnels.ms/register/${profile?.userId}`
+        )
         .then((res) => res.data)
+      console.log(res)
       setStatus(res.data)
     }
-
+    console.log(status)
     Check()
   }, [profile])
 
