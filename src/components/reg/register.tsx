@@ -19,9 +19,7 @@ export default function Register() {
   useEffect(() => {
     async function Check() {
       const res = await axios
-        .get(
-          `https://34f8-49-48-109-192.ngrok-free.app/register/${profile?.userId}`
-        )
+        .get(`http://localhost:3001/register/${profile?.userId}`)
         .then((res) => res.data)
       setStatus(res.data)
     }

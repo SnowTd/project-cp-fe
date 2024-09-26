@@ -37,78 +37,22 @@ import {
 import { Avatar, AvatarImage } from './ui/avatar'
 import Link from 'next/link'
 import TransactionsEdit from './subui/transactions-edit'
-
-// const data: Customer[] = [
-//   {
-//     uid: 'm5gr84i9',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Ken',
-//     subscription: 'true',
-//     email: 'ken99@yahoo.com',
-//     date: 'YYYY-MM-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'รอเข้าไปรับ',
-//   },
-//   {
-//     uid: '3u1reuv4',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Abe',
-//     subscription: 'true',
-//     email: 'Abe45@gmail.com',
-//     date: '2004-MM-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'เข้ารับเรียบร้อย',
-//   },
-//   {
-//     uid: 'derv1ws0',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Monserrat',
-//     subscription: 'true',
-//     email: 'Monserrat44@gmail.com',
-//     date: 'YYYY-MM-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'รอเข้าไปรับ',
-//   },
-//   {
-//     uid: '5kma53ae',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Silas',
-//     subscription: 'true',
-//     email: 'Silas22@gmail.com',
-//     date: '2022-12-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'เข้ารับเรียบร้อย',
-//   },
-//   {
-//     uid: 'bhqecj4p',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Carmella',
-//     subscription: 'true',
-//     email: 'carmella@hotmail.com',
-//     date: '2022-11-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'เสร็จสิ้น',
-//   },
-//   {
-//     uid: 'h9q0n6r4',
-//     profile: 'https://github.com/shadcn.png',
-//     name: 'Joseph',
-//     subscription: 'true',
-//     email: 'joseph@gmailcom',
-//     date: 'YYYY-MM-DD-hh:mm:ss',
-//     address: '123 Main St, Anytown, USA',
-//     status: 'เสร็จสิ้น',
-//   },
-// ]
-
+type OrderItem = {
+  id: number
+  type: string
+  amount: number
+  orderID: number
+}
 type Customer = {
   uid: string
   profile: string
   name: string
-  subscription: 'true' | 'false'
+  subscription: boolean
   date: string
   address: string
-  status: 'pending' | 'received' | 'preparing' | 'shipping' | 'delivered'
+  status: string
+  skull: OrderItem[]
+  order: number
 }
 
 const statusOptions = [
@@ -174,7 +118,9 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: 'subscription',
     header: 'subscription',
     cell: ({ row }) => (
-      <div className='capitalize'>{row.getValue('subscription')}</div>
+      <div className='capitalize'>
+        {row.getValue('subscription') ? 'true' : 'false'}
+      </div>
     ),
   },
   {
@@ -191,10 +137,25 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       return (
         <div className='text-right'>
-          <TransactionsEdit row={row} />
+          <TransactionsEdit
+            row={row}
+            type={row.getValue('skull')!}
+          />
         </div>
       )
     },
+  },
+  {
+    accessorKey: 'skull',
+    enableHiding: true,
+    header: '',
+    cell: () => '',
+  },
+  {
+    accessorKey: 'order',
+    enableHiding: true,
+    header: '',
+    cell: () => '',
   },
 ]
 
@@ -206,7 +167,6 @@ export function DataTableDemo({ data }: { data: Customer[] }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-
   const table = useReactTable({
     data,
     columns,

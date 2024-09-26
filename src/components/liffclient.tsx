@@ -35,14 +35,11 @@ const LiffClient = ({ data }: { data: any }) => {
     const urlapi = process.env.BASEURL_API!
     const url = `${urlapi}user`
     try {
-      const response = await axios.post(
-        'https://ldbpxndv-3001.asse.devtunnels.ms/user',
-        {
-          userId: profileData.userId,
-          displayName: profileData.displayName,
-          pictureUrl: profileData.pictureUrl,
-        }
-      )
+      const response = await axios.post('http://localhost:3001/user', {
+        userId: profileData.userId,
+        displayName: profileData.displayName,
+        pictureUrl: profileData.pictureUrl,
+      })
       console.log(response.data)
       console.log('Profile sent to backend:', response.data)
     } catch (error) {

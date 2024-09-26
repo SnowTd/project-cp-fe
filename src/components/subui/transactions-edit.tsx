@@ -11,26 +11,70 @@ import {
 } from '@/components/ui/drawer'
 import { Button } from '../ui/button'
 import { CirclePlus } from 'lucide-react'
+import axios from 'axios'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ComboboxForm } from './transactions-edit-action'
+import FormSub from './formsub'
 
-export default function TransactionsEdit({ row }: any) {
-  const [item, setItem] = useState<string[]>([])
+export default function TransactionsEdit({ row, type }: any) {
+  const [item, setItem] = useState<any>([])
   const [input, setInput] = useState('')
-  const [isAdding, setIsAdding] = useState(false) // state สำหรับแสดง input
+  const [isAdding, setIsAdding] = useState(false)
+  const [orderID, setOrderID] = useState<any>()
+  const [amount, setAmount] = useState()
 
-  // ฟังก์ชันเพิ่ม task เข้าไปใน Todo List
+  // console.log(item)
+  useEffect(() => {
+    if (type.length > 0) {
+      setItem(type)
+    }
+
+    if (type.length > 0) {
+      setOrderID(type[0].orderID)
+      console.log(orderID)
+    }
+
+    if (item.length > 0) {
+      setOrderID(row.getValue('order'))
+    }
+    console.log('use')
+  }, [item.length])
+
+  async function Post(data: any) {
+    data.map(async (item: any) => {
+      if (item.id === undefined) {
+        const num = Number(item.amount)
+        const res = await axios.post(`http://localhost:3001/type/${orderID}`, {
+          type: item.type,
+          amount: num,
+        })
+      }
+    })
+  }
+
   const addTask = () => {
     if (input.trim()) {
       setItem([...item, input])
-      setInput('') // ล้างค่า input หลังจากเพิ่ม task
-      setIsAdding(false) // ซ่อน input หลังจากเพิ่ม task
+      setInput('')
+      setIsAdding(false)
     }
   }
 
   // ฟังก์ชันลบ task
-  const deleteTask = (index: number) => {
-    setItem(item.filter((_, i) => i !== index))
+  const deleteTask = async (index: number, id: any) => {
+    if (id !== undefined) {
+      const res = await axios
+        .delete(`http://localhost:3001/type/${orderID}`, {
+          data: {
+            typeid: id,
+          },
+        })
+        .then((res) => res.data)
+      setItem(item.filter((_: any, i: number) => i !== index))
+      console.log(res)
+    }
+    setItem(item.filter((_: any, i: number) => i !== index))
   }
 
   return (
@@ -46,7 +90,7 @@ export default function TransactionsEdit({ row }: any) {
                 <p>Name: {row.getValue('name')}</p>
                 <p>Address: {row.getValue('address')} </p>
                 <p>
-                  ประเภทสมาชิก:{' '}
+                  ประเภทสมาชิก:
                   {row.getValue('subscription') ? 'สมาชิกรายเดือน' : 'สมาชิก'}
                 </p>
                 {row.getValue('subscription') ? (
@@ -54,22 +98,31 @@ export default function TransactionsEdit({ row }: any) {
                 ) : (
                   ''
                 )}
-                {/* Render Todo List */}
                 <ul>
-                  {item.map((task, index) => (
-                    <li
-                      key={index}
-                      className='flex justify-between p-2'>
-                      <span>{task}</span>
-                      <Button
-                        variant='outline'
-                        size='icon'
-                        className='h-6 w-6'
-                        onClick={() => deleteTask(index)}>
-                        ❌
-                      </Button>
-                    </li>
-                  ))}
+                  {item.length > 0 ? (
+                    item.map((e: any, index: number) => (
+                      <li
+                        key={e.id}
+                        className='flex justify-between p-2'>
+                        {row.getValue('subscription') ? (
+                          <span> {amount}</span>
+                        ) : (
+                          <span>
+                            {e.type} (Amount: {e.amount})
+                          </span>
+                        )}
+                        <Button
+                          variant='outline'
+                          size='icon'
+                          className='h-6 w-6'
+                          onClick={() => deleteTask(index, e.id)}>
+                          ❌
+                        </Button>
+                      </li>
+                    ))
+                  ) : (
+                    <li>No items found</li>
+                  )}
                 </ul>
               </DrawerDescription>
             </DrawerHeader>
@@ -87,7 +140,17 @@ export default function TransactionsEdit({ row }: any) {
 
                 {isAdding && (
                   <div className='flex items-center space-x-2'>
-                    <input
+                    {row.getValue('subscription') ? (
+                      <FormSub setAmount={setAmount} />
+                    ) : (
+                      <ComboboxForm
+                        item={item}
+                        setItem={setItem}
+                        setInput={setInput}
+                        setIsAdding={setIsAdding}
+                      />
+                    )}
+                    {/* <input
                       type='text'
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
@@ -107,13 +170,15 @@ export default function TransactionsEdit({ row }: any) {
                       className='h-8 w-8 shrink-0 rounded-full'
                       onClick={() => setIsAdding(false)}>
                       ❌
-                    </Button>
+                    </Button> */}
                   </div>
                 )}
               </div>
             </div>
             <DrawerFooter>
-              <Button>Submit</Button>
+              <DrawerClose asChild>
+                <Button onClick={() => Post(item)}>Submit</Button>
+              </DrawerClose>
               <DrawerClose asChild>
                 <Button variant='outline'>Cancel</Button>
               </DrawerClose>
