@@ -20,9 +20,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -35,7 +32,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Avatar, AvatarImage } from './ui/avatar'
-import Link from 'next/link'
 import TransactionsEdit from './subui/transactions-edit'
 type OrderItem = {
   id: number
@@ -55,13 +51,6 @@ type Customer = {
   order: number
 }
 
-const statusOptions = [
-  'pending',
-  'receive',
-  'preparing',
-  'shipping',
-  'deliverd',
-]
 export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: 'profile',
