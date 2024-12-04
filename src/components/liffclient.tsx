@@ -5,15 +5,23 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useRouter, usePathname } from 'next/navigation'
 import axios from 'axios'
 
-const LiffClient = ({ data }: { data: any }) => {
+const LiffClient = ({
+  data,
+  url,
+  liffid,
+}: {
+  data: any
+  url: string
+  liffid: string
+}) => {
   const router = useRouter()
   const [liffError, setLiffError] = useState<string | null>(null)
   const [profile, setProfile] = useState<any>(null)
-
+  const userapi = url
   useEffect(() => {
     const initializeLiff = async () => {
       try {
-        await liff.init({ liffId: '2006378911-pdP8yGWK' })
+        await liff.init({ liffId: liffid })
         if (liff.isLoggedIn()) {
           const profileData = await liff.getProfile()
           setProfile(profileData)
@@ -32,17 +40,13 @@ const LiffClient = ({ data }: { data: any }) => {
   }, [])
 
   const sendProfileToBackend = async (profileData: any) => {
-    const urlapi = process.env.BASEURL_API!
-    const url = `${urlapi}user`
+    const url = `${userapi}user`
     try {
-      const response = await axios.post(
-        'https://5f0a-202-28-119-90.ngrok-free.app/user',
-        {
-          userId: profileData.userId,
-          displayName: profileData.displayName,
-          pictureUrl: profileData.pictureUrl,
-        }
-      )
+      const response = await axios.post(url, {
+        userId: profileData.userId,
+        displayName: profileData.displayName,
+        pictureUrl: profileData.pictureUrl,
+      })
       console.log(response.data)
       console.log('Profile sent to backend:', response.data)
     } catch (error) {

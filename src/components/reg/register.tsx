@@ -12,16 +12,20 @@ interface Profile {
   pictureUrl: string
   statusMessage: string
 }
-export default function Register() {
+export default function Register({
+  url,
+  liffid,
+}: {
+  url: string
+  liffid: string
+}) {
   const [profile, setProfile] = useState<Profile>()
   const [status, setStatus] = useState()
   console.log(profile)
   useEffect(() => {
     async function Check() {
       const res = await axios
-        .get(
-          `https://ldbpxndv-3001.asse.devtunnels.ms/register/${profile?.userId}`
-        )
+        .get(`${url}register/${profile?.userId}`)
         .then((res) => res.data)
       console.log(res)
       setStatus(res.data)
@@ -41,7 +45,11 @@ export default function Register() {
               <p className='font-bold text-xl text-center mt-4'>
                 Register Form
               </p>
-              <LiffClient data={setProfile} />
+              <LiffClient
+                data={setProfile}
+                url={url}
+                liffid={liffid}
+              />
             </div>
           </div>
           <div className='flex justify-center'>

@@ -3,7 +3,13 @@ import Link from 'next/link'
 import { Home, PowerIcon } from 'lucide-react'
 import NavLinks from './nav-link'
 import LiffPage from './liff'
-export default function SideNav() {
+export default function SideNav({
+  url,
+  liffid,
+}: {
+  url: string
+  liffid: string
+}) {
   return (
     <div className='flex h-full flex-col px-3 py-4 md:px-2 border-r border-gray-200'>
       <Link
@@ -20,7 +26,10 @@ export default function SideNav() {
         <NavLinks />
         <div className='hidden h-auto w-full grow rounded-md bg-gray-50 md:block'></div>
         <div className='flex justify-center items-center'>
-          <LiffPage />
+          <LiffPage
+            url={url}
+            liffid={liffid}
+          />
         </div>
       </div>
     </div>
