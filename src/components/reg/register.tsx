@@ -1,5 +1,4 @@
 'use client'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import ResForm from './formres'
 import LiffClient from '../liffclient'
 import { useEffect, useState } from 'react'
@@ -55,6 +54,7 @@ export default function Register({
           <div className='flex justify-center'>
             {!status ? (
               <ResForm
+                url={url}
                 profile={profile}
                 status={setStatus}
               />

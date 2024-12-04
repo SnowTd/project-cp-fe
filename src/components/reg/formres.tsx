@@ -3,13 +3,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,9 +33,11 @@ const formSchema = z.object({
 })
 
 export default function ResForm({
+  url,
   profile,
   status,
 }: {
+  url: string
   profile: any
   status: any
 }) {
@@ -52,17 +52,13 @@ export default function ResForm({
 
   async function Post(values: z.infer<typeof formSchema>) {
     const { address, phone, name } = values
-    const urlapi = process.env.BASEURL_API!
-    const url = `${urlapi}register`
-    const res = await axios.post(
-      'https://api.sniw.me/register',
-      {
-        userID: profile.userId,
-        name,
-        phone,
-        address,
-      }
-    )
+    const urlres = `${url}register`
+    const res = await axios.post(urlres, {
+      userID: profile.userId,
+      name,
+      phone,
+      address,
+    })
   }
 
   // 2. Define a submit handler.

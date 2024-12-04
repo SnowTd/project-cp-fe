@@ -1,5 +1,3 @@
-import Image from 'next/image'
-import liff from '@line/liff'
 import LiffPage from '@/components/liff'
 export default function Home() {
   const url = process.env.BASEURL_API!

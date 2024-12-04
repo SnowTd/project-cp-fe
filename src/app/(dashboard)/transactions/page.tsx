@@ -2,9 +2,8 @@ import { DataTableDemo } from '@/components/transactions'
 import axios from 'axios'
 
 async function getData() {
-  const res = await axios
-    .get('https://api.sniw.me/order')
-    .then((res) => res.data)
+  const url = process.env.BASEURL_API!
+  const res = await axios.get(`${url}order`).then((res) => res.data)
   return res.response
 }
 
