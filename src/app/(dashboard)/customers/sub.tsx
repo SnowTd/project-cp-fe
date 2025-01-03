@@ -7,7 +7,10 @@ import { DataTableDemo } from '@/components/member'
 export default function Sub({ url }: { url: string }) {
   const [data, setData] = useState([])
   useEffect(() => {
-    axios.get(`${url}user`).then((res) => setData(res.data.response))
+    axios
+      .get(`${url}user`)
+      .then((res) => setData(res.data.response))
+      .catch((ee) => console.log(ee))
   }, [])
   return <DataTableDemo data={data} />
 }
